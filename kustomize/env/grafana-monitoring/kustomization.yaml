@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: grafana-monitoring
+
+resources:
+- ../../base/grafana/instance
+
+patches:
+- target:
+    kind: GrafanaDataSource
+    name: thanos
+  patch: |-
+    - op: replace
+      path: /spec/datasources/0/secureJsonData/httpHeaderValue1
+      value: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IndadmduYUpHMF9nTURnRFJQTHhhU1pPRi11WjhIOUlvYlFPTEU1dnNEV0UifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJncmFmYW5hLW1vbml0b3JpbmciLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlY3JldC5uYW1lIjoiZ3JhZmFuYS10aGFub3MtdG9rZW4tOXcyd2giLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZ3JhZmFuYS10aGFub3MiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIwZmQ2MTIwMS1iNGI1LTQ3MWQtYTBiYi05NjI1MGYyMGI2MjAiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6Z3JhZmFuYS1tb25pdG9yaW5nOmdyYWZhbmEtdGhhbm9zIn0.V749xD7mRVW69eJiLkt2M9AcqqLNSxxoCgOYzSHVNb0qA7CfuxoYLAOuqCRa-cRx1OlDT6eGw77NWY1LHEi4pxYM2lCUr1ke0bKPhDdl8XReR6zB0fUcgb_aYWCqShyEL7ZTVhBqgJINTWsQ1l7a8EEdqg6ZovD7HNAjZ-9K9xZMZ3aJasZIwwMu1BA1H8BzDxWdFuKjvB7Vq2OV6LNZzlK6g638wN_6iDulJMIvYb_rrqh_7emcEwuaFu6F5thPeYx_8YHpqpa6bHUvqcwOrWA-KOEOmbRHuAjPKMu4tNRslsEs-i8CvBRW84oALAqMrEKrm903UwwyjiigttFCHAGfu16f9wZZgucqHTyKKMVPdr1j-7HS7IkJgADveKAv5_BggARpkdLO0Eg5H8qNMpZftDh6kOH3CYK1eKxfydDXe6fG5bP0IcC9cl6ylBF-5f-ZmhMNpi7W_ZG1vMMzOJij0rg-ZCiWbjhrrN-NC6k8w0MRyJ1t8aU6gYID9Tb0dUiTEPGsFzNtAQ4oDNi18vvhjkAjC0PSFCKeVo6g3LsxBgLyJ4ZSyiK_87BgC_kYVswwZ03Nq8pHZ5yzhedNE1xFcuf9kfKS6NrW8j0ujWa113eizJpQXmPSarQ1FbAIBZvPUxKpvFWRJXe12KqeO4fmwBmATshpudeOmzJV1YU
+- target:
+    kind: Grafana
+    name: grafana
+  patch: |-
+    - op: add
+      path: /spec/containers/0/args/-
+      value: '-openshift-sar={"resource": "namespaces", "verb": "get"}'
